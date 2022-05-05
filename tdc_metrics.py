@@ -17,9 +17,9 @@ def read_args():
 
 def main():
     args = read_args()
-    gen_data = pd.read_csv(args.generated_path, header=None)[0].to_list()[1:]
+    gen_data = pd.read_csv(args.generated_path)['SMILES'].to_list()[-1000:]
     train_data = pd.read_csv(args.train_path, header=None)[1].to_list()
-    
+
     logging.basicConfig(filename=str(args.name) + "_tdcmetrics.txt", level=logging.INFO)
 
     div_evaluator = Evaluator(name = 'Diversity')
@@ -31,6 +31,7 @@ def main():
     qed_oracle = Oracle(name = 'QED')
     fcd_evaluator = Evaluator(name = 'FCD_Distance')
 
+    logging.info("")
     logging.info("Diversity: " + str(div_evaluator(gen_data)))
     logging.info("Validity: " + str(val_evaluator(gen_data)))
     logging.info("Uniqueness: " + str(uniq_evaluator(gen_data)))
